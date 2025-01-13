@@ -42,8 +42,8 @@ const DashboardPage = () => {
 					transition={{ delay: 0.2 }}
 				>
 					<h3 className='text-xl font-semibold text-green-400 mb-3'>Profile Information</h3>
-					{user && <p className='text-gray-300'>Name: {user.name}</p>}
-					{user && <p className='text-gray-300'>Email: {user.email}</p>}
+					<p className='text-gray-300'>Name: {user.name}</p>
+					 <p className='text-gray-300'>Email: {user.email}</p>
 				</motion.div>
 				<motion.div
 					className='p-4 bg-gray-800 bg-opacity-50 rounded-lg border border-gray-700'
@@ -63,7 +63,7 @@ const DashboardPage = () => {
 					<p className='text-gray-300'>
 						<span className='font-bold'>Last Login: </span>
 
-						{user && formatDate(user.lastlogin)}
+						{formatDate(user.lastlogin)}
 					</p>
 				</motion.div>
 			</div>
