@@ -4,22 +4,19 @@ import Homepage from './pages/Homepage'
 import Dashbordpage from './pages/Dashbordpage';
 import Loginpage from './pages/Loginpage'
 import Signuppage from './pages/Signuppage';
-import useAuthStore from './store/useAuthStore';
+import Navbar from './components/common/Navbar'
 const App = () => {
    
 
-  const{checkAuth,isAuthtenicted,user}=useAuthStore();
-  useEffect(()=>{
-    checkAuth();
- },[checkAuth]);
+  
 
 
 
   return (
     <BrowserRouter >
-      
+      <Navbar/>
     <Routes>
-      <Route path='/' element={<Homepage/>}/>
+      <Route path='/home' element={<Homepage/>}/>
       <Route path='/login' element={<Loginpage/>}/>
       <Route path='/signup' element={<Signuppage/>}/>
       <Route path='/dashbord' element={<Dashbordpage/>}/>

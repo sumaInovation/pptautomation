@@ -1,11 +1,14 @@
 import React, { useEffect } from 'react'
 import useAuthStore from '../store/useAuthStore';
 const Homepage = () => {
-  const{user}=useAuthStore();
- 
+  const{}=useAuthStore();
+ useEffect(()=>{
+
+
+ })
   return (
     <div className='text-6xl text-center'>
-    {<h1>Welcome {user.name}</h1>}
+    {user && <h1>Welcome {user.name}</h1>}
     
     </div>
   )
