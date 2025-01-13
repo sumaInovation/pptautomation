@@ -19,7 +19,7 @@ const DashboardPage = () => {
         }
 		
 	};
-    //if(!isAuthtenicted)return <LoadingSpinner/>
+    if(!isAuthtenicted)return <LoadingSpinner/>
 	return (
         <>
          <div className="mt-[200px]"></div>
