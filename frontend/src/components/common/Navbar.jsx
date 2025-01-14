@@ -1,26 +1,49 @@
 
+import { useEffect } from 'react'
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
 import useAuthStore from '../../store/useAuthStore'
+import { useNavigate } from 'react-router-dom'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
 export default function Navbar() {
+  const navigate=useNavigate();
+  const{user,checkAuth,isAuthtenicted,logout}=useAuthStore();
+  const handleLogout = async () => {
+		try {
+			await logout();
+			console.log('Successfully logged out');
+			navigate("/login");
+		} catch (err) {
+			console.error('Logout failed:', err.message || err);
+			alert("Error: Unable to log out. Please try again.");
+		}
+	};
 
-const{user}=useAuthStore();
+  useEffect(() => {
+      checkAuth();
+    }, [checkAuth]);
 
-  const navigation = [
-    { name: 'Overviwe', href: '/', current: true },
-    { name: 'Reports', href: '/report', current: false },
-    { name: 'Inventory', href: '#', current: false },
-    { name: 'Analytics', href: '/analytics', current: false },
-    { name: `Sing Up`, href: '/signup', current: false },
-    { name: `Sing In`, href: '/login', current: false },
-    { name: `Dashboard`, href: '/dashbord', current: false },
-  ]
+    const navigation = [
+      { name: "Overview", href: "/", current: true },
+      { name: "Reports", href: "/report", current: false },
+      { name: "Inventory", href: "#", current: false },
+      { name: "Analytics", href: "/analytics", current: false },
+      { name: "Sign Up", href: "/signup", current: false },
+       // The Dashboard link is conditionally included based on the login state
+       ...(!isAuthtenicted
+        ? [{ name: "SignIn", href: "/login", current: false }]
+        : []),
+      // The Dashboard link is conditionally included based on the login state
+      ...(isAuthtenicted
+          ? [{ name: "Dashboard", href: "/dashboard", current: false }]
+          : []),
+  ];
+
   return (
     <Disclosure as="nav" className="bg-gray-800 fixed top-0 left-0 w-full z-50 ">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -73,7 +96,15 @@ const{user}=useAuthStore();
                   <span className="absolute -inset-1.5" />
                   <span className="sr-only">Open user menu</span>
                   
-                    {(user!=null) &&<img src={user.picture} alt="Profile" className="w-10 h-10 rounded-full" />}
+                  {(user != null) && (
+    <img 
+        src={user.picture || "https://via.placeholder.com/40"} 
+        alt="Profile" 
+        className="w-10 h-10 rounded-full" 
+        loading="lazy" 
+        onError={(e) => e.target.src = "https://via.placeholder.com/40"} 
+    />
+)}
                   
                 </MenuButton>
               </div>
@@ -98,12 +129,12 @@ const{user}=useAuthStore();
                   </a>
                 </MenuItem>
                 <MenuItem>
-                  <a
-                    href="#"
+                  <button
+                    
                     className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
-                    onClick={""}>
+                    onClick={handleLogout}>
                     Sign out
-                  </a>
+                  </button>
                 </MenuItem>
               </MenuItems>
             </Menu>

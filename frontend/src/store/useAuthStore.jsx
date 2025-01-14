@@ -81,7 +81,7 @@ const useAuthStore=create((set)=>({
             {withCredentials:true}
            );
         
-        set({user:response.data.message,isAuthtenicted:false});
+        set({user:null,isAuthtenicted:false});
 
       }catch(err){
          set({error:err.response.message})

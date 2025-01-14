@@ -8,17 +8,19 @@ import { useNavigate } from "react-router-dom";
 const DashboardPage = () => {
     const navigate=useNavigate();
     const{isAuthtenicted,user,logout,checkAuth}=useAuthStore();
-	
+	useEffect(() => {
+		checkAuth();
+	}, [checkAuth]);
 
-	const handleLogout =async () => {
-        try{
-            await logout();
-            console.log('Successfuly loged out');
-            navigate("/login")
-        }catch(err){
-            console.log('Cannot Logout');
-        }
-		
+	const handleLogout = async () => {
+		try {
+			await logout();
+			console.log('Successfully logged out');
+			navigate("/login");
+		} catch (err) {
+			console.error('Logout failed:', err.message || err);
+			alert("Error: Unable to log out. Please try again.");
+		}
 	};
 	  
     if(!isAuthtenicted)return <LoadingSpinner/>
@@ -44,8 +46,8 @@ const DashboardPage = () => {
 					transition={{ delay: 0.2 }}
 				>
 					<h3 className='text-xl font-semibold text-green-400 mb-3'>Profile Information</h3>
-					<p className='text-gray-300'>Name: {user.name}</p>
-					 <p className='text-gray-300'>Email: {user.email}</p>
+					<p className='text-gray-300'>Name: {user?.name || "N/A"}</p>
+                    <p className='text-gray-300'>Email: {user?.email || "N/A"}</p>
 				</motion.div>
 				<motion.div
 					className='p-4 bg-gray-800 bg-opacity-50 rounded-lg border border-gray-700'

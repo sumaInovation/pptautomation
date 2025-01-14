@@ -28,7 +28,7 @@ const Login = () => {
         password:formData.password
        }
       await login(details);
-      navigate("/")
+      navigate("/dashboard")
     }catch(err){
 
     }
@@ -43,7 +43,7 @@ const Login = () => {
   try{
         await login(details);
         console.log('successfully google login!')
-        navigate('/dashbord')
+        navigate('/dashboard')
      }catch(error){
     console.log('error google login')
 
