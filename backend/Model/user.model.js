@@ -24,6 +24,8 @@ isVerified:{
 resetPasswordToken:String,
 resetPasswordExpiresAt:Date,
 verificationToken:String,
-verificationTokenExpireAt:Date
+verificationTokenExpireAt:Date,
+googleID:String,
+picture:String,
 },{timestamps:true})
 module.exports=mongoose.model('user',userSchema);

@@ -72,10 +72,9 @@ const{user}=useAuthStore();
                 <MenuButton className=" relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                   <span className="absolute -inset-1.5" />
                   <span className="sr-only">Open user menu</span>
-                  {/* {
-                    !user? "" :
-                      <img src={user.picture} alt="Profile" className="w-10 h-10 rounded-full" />
-                  } */}
+                  
+                    {(user!=null) &&<img src={user.picture} alt="Profile" className="w-10 h-10 rounded-full" />}
+                  
                 </MenuButton>
               </div>
               <MenuItems

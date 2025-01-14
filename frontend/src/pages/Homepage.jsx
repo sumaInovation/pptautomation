@@ -8,7 +8,7 @@ const Homepage = () => {
  })
   return (
     <div className='text-6xl text-center'>
-    {user && <h1>Welcome {user.name}</h1>}
+    <h1>Welcome</h1>
     
     </div>
   )

@@ -6,6 +6,7 @@ const cors=require('cors');
 const connectDB = require('./db/connectDB')
 const authRoutes = require('./Routes/auth.route');
 
+
    
 const PORT = process.env.PORT||5000;
 
@@ -32,4 +33,4 @@ app.get('*', (req, res) => {
 app.listen(PORT, () => {
     connectDB();
     console.log(`Server Running on port:${PORT}`)
-});   
+});      

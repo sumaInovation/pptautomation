@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import {GoogleLogin } from "@react-oauth/google";
 import useAuthSrore from '../store/useAuthStore'
 import { useNavigate } from "react-router-dom";
 import {Loader } from "lucide-react";
@@ -7,6 +7,7 @@ import {Loader } from "lucide-react";
 const Login = () => {
   const navigate=useNavigate()
   const{login,isLoading,error}=useAuthSrore()
+  
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -22,8 +23,11 @@ const Login = () => {
     e.preventDefault();
    // Add your API call for login here
     try{
-     
-      await login(formData.email,formData.password);
+       const details={
+        email:formData.email,
+        password:formData.password
+       }
+      await login(details);
       navigate("/")
     }catch(err){
 
@@ -31,7 +35,24 @@ const Login = () => {
   
   };
 
-  
+  const handleGoogleSuccess = async(response) => {
+      const details={
+        credential:response.credential
+      }
+    
+  try{
+        await login(details);
+        console.log('successfully google login!')
+        navigate('/dashbord')
+     }catch(error){
+    console.log('error google login')
+
+  }
+  };
+
+  const handleGoogleFailure = (error) => {
+    console.error("Google Login Failed:", error);
+  };
 
   return (
     <div className="flex justify-center items-center h-screen">
@@ -40,6 +61,15 @@ const Login = () => {
           Login
         </h2>
 
+        {/* Google Login */}
+        
+          <div className="flex justify-center mb-6">
+            <GoogleLogin
+              onSuccess={handleGoogleSuccess}
+              onError={handleGoogleFailure}
+              text="signin_with"
+            />
+          </div>
         
 
         <div className="flex items-center mb-6">

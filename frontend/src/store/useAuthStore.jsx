@@ -9,12 +9,16 @@ const useAuthStore=create((set)=>({
    error:null,
    isLoading:false,
    isCheckingAuth:true,
-   signup:async(email,password,name)=>{
+   signup:async(details)=>{
+      const{email,password,name,credential}=details;
+      let userData;
+      if(credential!=undefined)userData={credential}
+      else userData={email,password,name}
       set({isLoging:true,error:null})
       try{
         
        const response= await axios.post(`${API_URL}/singup`,
-        {email,password,name},
+        userData,
         {withCredentials:true}
        )
        
@@ -26,12 +30,16 @@ const useAuthStore=create((set)=>({
       }
 
    },
-   login:async(email,password)=>{
-      console.log('called login function')
+   login:async(details)=>{
+      const{email,password,credential}=details;
+      let userData;
+      if(credential!==undefined)userData={credential}
+      else userData={email,password}
+   
     set({isLoading:true})
     try{
         const response= await axios.post(`${API_URL}/login`,
-            {email,password},
+            userData,
             {withCredentials:true}
            );
          console.log(response.data.message);
@@ -48,19 +56,20 @@ const useAuthStore=create((set)=>({
 
    },
    checkAuth:async()=>{//ckeck login user
+     
      set({isCheckingAuth:true,error:null})
      try{
         const response= await axios.get(`${API_URL}/check-auth`,
         
             {withCredentials:true}
            );
-      
+           console.log(response.data.message) 
         set({user:response.data.message,isCheckingAuth:false,isAuthtenicted:true});
-        console.log('user',user.name)
         
+       
 
      }catch(err){
-      
+      console.log(err.response.data.message)
          set({error:err.response.data.message|| null,isCheckingAuth:false,isAuthtenicted:false});
         //throw err
      }

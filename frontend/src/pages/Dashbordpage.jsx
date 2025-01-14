@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import useAuthStore from "../store/useAuthStore";
 import { formatDate } from "../utils/Dates";
@@ -6,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 const DashboardPage = () => {
     const navigate=useNavigate();
-    const{isAuthtenicted,user,logout}=useAuthStore();
+    const{isAuthtenicted,user,logout,checkAuth}=useAuthStore();
 	
 
 	const handleLogout =async () => {
@@ -19,6 +20,7 @@ const DashboardPage = () => {
         }
 		
 	};
+	  
     if(!isAuthtenicted)return <LoadingSpinner/>
 	return (
         <>
@@ -54,7 +56,7 @@ const DashboardPage = () => {
 					<h3 className='text-xl font-semibold text-green-400 mb-3'>Account Activity</h3>
 					<p className='text-gray-300'>
 						<span className='font-bold'>Joined: </span>
-						{user && new Date(user.createdAt).toLocaleDateString("en-US", {
+						{new Date(user.createdAt).toLocaleDateString("en-US", {
 							year: "numeric",
 							month: "long",
 							day: "numeric",
