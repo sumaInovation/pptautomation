@@ -61,7 +61,7 @@ const useAuthStore=create((set)=>({
        
 
      }catch(err){
-      c
+      
          set({error:err.response.data.message|| null,isCheckingAuth:false,isAuthtenicted:false});
         //throw err
      }
