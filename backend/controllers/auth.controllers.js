@@ -1,7 +1,8 @@
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const User = require('../Model/user.model');
-
+const jwt=require('jsonwebtoken');
+require('dotenv').config();
 const passport = require('passport');
 
 
@@ -41,39 +42,31 @@ const singup = async (req, res, next) => {
 
 const login = async (req, res, next) => {
     try {
-        const userExsist = await User.findOne({ email: req.email });
-       
+         const userExsist = await User.findOne({ email: req.email });
         if (!userExsist) return res.status(400).json({ success: false, message: 'Not register user' });
-        if (!req.password) {
-            //set session and cookies for front end
-            
-            req.session.user =userExsist
-            return res.status(200).json({ success: true, message: 'Google Login successful' })
-        }
         if (userExsist.password != req.password) return res.status(400).json({ success: false, message: 'Incorrect Password' });
-        //set session and cooies for front end
-        req.session.user = userExsist
-        return res.status(200).json({ success: true, message: 'Traditinal Login successful' })
-        if (userExsist.password != req.passport) return res.status(400).json({ success: false, message: 'Incorrect Password' });
-
-
-
-    } catch (err) {
-        return res.status(400).json({ success: false, message: err.message });
-
-    }
+       
+            const token=jwt.sign({user:userExsist},process.env.JWT_SECRET,{expiresIn:'1h'})
+             
+  // Set token as a cookie
+   res.cookie("authToken", token, {
+    httpOnly: true, // Prevent access via JavaScript
+    secure: process.env.NODE_ENV === "production", // Send only over HTTPS
+    sameSite: "Strict", // Protect against CSRF
+    maxAge: 3600000, // 1 hour in milliseconds
+  });
+return res.json({ message: "Login successful" });
+} catch (err) {
+    return res.status(400).json({ success: false, message: err.message });
+}
 
 }
 
 const logout = async (req, res, next) => {
-    req.session.destroy((err) => {
-        if (err) {
-            return res.status(400).json({ success: false, message: 'Error logout' });
-        }
-        return res.status(200).json({ success: true, message: 'Logged out successfully' })
-    })
-
-
+    //Delete cookies
+    res.clearCookie("authToken");
+    res.json({success:true, message: "Logged out successfully" });
+    
 }
 
 const forgetPassword = async (req, res, next) => {
@@ -119,17 +112,7 @@ const resetPassword = async (req, res, next) => {
 }
 
 const checkAuth = async (req, res, next) => {
-    console.log('involed')
-    try {
-        if (req.session.user) {
-            return res.status(200).json({ success: true, message: req.session.user });
-        } else {
-            return res.status(401).json({ success: false, message: 'No user logged in' });
-        }
-
-    } catch (err) {
-        return res.status(400).json({ success: false, message: err.message });
-    }
+      res.status(200).json({success:true,message:req.user})
 
 }
 

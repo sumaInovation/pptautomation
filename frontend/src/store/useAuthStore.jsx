@@ -48,21 +48,21 @@ const useAuthStore=create((set)=>({
 
    },
    checkAuth:async()=>{//ckeck login user
-
+//When Free request automatically cookies send to backend then back end send user details
      set({isCheckingAuth:true,error:null})
      try{
         const response= await axios.get(`${API_URL}/check-auth`,
         
             {withCredentials:true}
            );
-         console.log(response.data.message)
-        set({user:response.data.message,isCheckingAuth:false,isAuthtenicted:true});
-        console.log(user)
+         console.log(response.data.message.user);
+        set({user:response.data.message.user,isCheckingAuth:false,isAuthtenicted:true});
+       
        
 
      }catch(err){
       
-         set({error:err.response.data.message|| null,isCheckingAuth:false,isAuthtenicted:false});
+         //set({error:err.response.data.message|| null,isCheckingAuth:false,isAuthtenicted:false});
         //throw err
      }
    }, 

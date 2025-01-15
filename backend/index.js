@@ -1,5 +1,4 @@
 const express = require('express');
-const session=require('express-session');
 const app = express();
 const path=require('path');
 const cookiesparser=require('cookie-parser');
@@ -14,18 +13,7 @@ app.use(cors({
     origin:'http://localhost:5173',
     credentials:true
 }))
-app.use(
-  session({
-    secret: 'yourSecretKey', // Replace with a strong secret
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      httpOnly: true,
-      secure:process.env.NODE_ENV==='production',
-      maxAge: 24*60*60 * 1000, // 1 day
-    },
-  })
-);
+
 
 app.use('/api/auth', authRoutes);
 if (process.env.NODE_ENV === "production") {
