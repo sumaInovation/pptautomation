@@ -8,11 +8,11 @@ import Signuppage from './pages/Signuppage';
 import Navbar from './components/common/Navbar'
 import useAuthSrore from './store/useAuthStore'
 const App = () => {
-  const{login,isLoading,error,user,checkAuth}=useAuthSrore()
+  const{checkAuth}=useAuthSrore()
 //Ever Re-rendering get user details from cooies
   useEffect(()=>{
    checkAuth();
-  },[])
+  },[checkAuth])
 
 
 
@@ -23,7 +23,7 @@ const App = () => {
     <BrowserRouter >
       <Navbar/>
     <Routes>
-      <Route path='/home' element={<Homepage/>}/>
+      <Route path='/' element={<Homepage/>}/>
       <Route path='/login' element={<Loginpage/>}/>
       <Route path='/signup' element={<Signuppage/>}/>
       <Route path='/dashboard' element={<Dashbordpage/>}/>

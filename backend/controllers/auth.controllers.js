@@ -1,64 +1,37 @@
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
-
 const User = require('../Model/user.model');
-const generateTokenAndsetCookies = require('../utils/generateTokenAndsetCookies')
-const VerifyGoogletoken = require('../utils/VerifyGoogletoken')
+
+const passport = require('passport');
+
 
 const singup = async (req, res, next) => {
+
     try {
-        const { email, password, name, credential } = req.body;
-        let user = null;
-        if (credential) {
-            //verify google token frist
-            const newuser = await VerifyGoogletoken(credential)
-            if (newuser == null) return res.status(400).json({ success: false, message: 'Google acount not valid!' });
-            const email = newuser.email
-            const userAlreadyExsist = await User.findOne({ email });
-            if (userAlreadyExsist) return res.status(400).json({ success: false, message: 'User aleady exsist' });
+        const userAlreadyExsist = await User.findOne({ email: req.email });
+        if (userAlreadyExsist) return res.status(400).json({ success: false, message: 'User aleady exsist' });
+        const newUser = {};
 
-            user = new User({
-                googleID: newuser.sub,
-                email: newuser.email,
-                password: "#",
-                name: newuser.name,
-                picture: newuser.picture,
-                verificationToken: Math.floor(100000 + Math.random() * 900000).toString(),
-                verificationTokenExpireAt: Date.now() + 24 * 60 * 60 * 1000
-            });
+        if (req.email) newUser.email = req.email;
+        if (req.password) newUser.password = req.password;
+        if (req.name) newUser.name = req.name;
+        if (req.picture) newUser.picture = req.picture;
+        if (req.googleID) newUser.googleID = req.googleID;
+        newUser.verificationToken = Math.floor(100000 + Math.random() * 900000).toString(),
+        newUser.verificationTokenExpireAt = Date.now() + 24 * 60 * 60 * 1000
 
 
-        } else {
-
-            if (!email || !password || !name) throw new Error('All Fields are Required!');
-            const userAlreadyExsist = await User.findOne({ email });
-            if (userAlreadyExsist) return res.status(400).json({ success: false, message: 'User aleady exsist' });
-            const hashedpassword = await new bcrypt.hash(password, 10);
-            user = new User({
-                googleID: "#",
-                email,
-                password: hashedpassword,
-                name,
-                verificationToken: Math.floor(100000 + Math.random() * 900000).toString(),
-                verificationTokenExpireAt: Date.now() + 24 * 60 * 60 * 1000
-            });
-
-        }
+        const user = new User(newUser);
 
         await user.save();
-        //jwt create
-        //generateTokenAndsetCookies(res, user._id);
+
         return res.status(201).json({
             success: true,
             message: 'User Acount Created Successfully',
 
         })
-        //email verifications
-
-
     } catch (err) {
         return res.status(400).json({ success: false, message: err.message });
-
 
     }
 
@@ -67,47 +40,39 @@ const singup = async (req, res, next) => {
 }
 
 const login = async (req, res, next) => {
-    const { email, password, name, credential } = req.body;
-    let newuser = null;
-    if (credential) newuser = await VerifyGoogletoken(credential);
-    if (newuser == null && credential) return res.status(401).json({ success: false, message: 'Invalid Credintials google' })
-
-
     try {
-        let user = null;
-        if (credential) { user = await User.findOne({ email: newuser.email }) }
-        else {
-
-            user = await User.findOne({ email })
-            if (!user) return res.status(401).json({ success: false, message: 'Invalid Credintials' })
-            const isPasswordValid = await bcrypt.compare(password, user.password);
-            if (!isPasswordValid) return res.status(400).json({ success: false, message: 'Incorrect password' })
+        const userExsist = await User.findOne({ email: req.email });
+       
+        if (!userExsist) return res.status(400).json({ success: false, message: 'Not register user' });
+        if (!req.password) {
+            //set session and cookies for front end
+            
+            req.session.user =userExsist
+            return res.status(200).json({ success: true, message: 'Google Login successful' })
         }
-        if(user){generateTokenAndsetCookies(res, user._id);
-        user.lastlogin = new Date();
-        await user.save();
-        return res.status(201).json({
-            success: true,
-            message: 'User Created Successfully',
-            user: {
-                ...user._doc,
-                password: undefined
-            }
-        })
-    }else{
-        return res.status(400).json({ success: false, message: 'Please try again' })  
-    }
+        if (userExsist.password != req.password) return res.status(400).json({ success: false, message: 'Incorrect Password' });
+        //set session and cooies for front end
+        req.session.user = userExsist
+        return res.status(200).json({ success: true, message: 'Traditinal Login successful' })
+        if (userExsist.password != req.passport) return res.status(400).json({ success: false, message: 'Incorrect Password' });
+
+
 
     } catch (err) {
-        console.log(err)
         return res.status(400).json({ success: false, message: err.message });
 
     }
+
 }
 
 const logout = async (req, res, next) => {
-    res.clearCookie('token');
-    res.status(200).json({ success: true, message: 'Logged out successfully' })
+    req.session.destroy((err) => {
+        if (err) {
+            return res.status(400).json({ success: false, message: 'Error logout' });
+        }
+        return res.status(200).json({ success: true, message: 'Logged out successfully' })
+    })
+
 
 }
 
@@ -154,10 +119,14 @@ const resetPassword = async (req, res, next) => {
 }
 
 const checkAuth = async (req, res, next) => {
+    console.log('involed')
     try {
-        const user = await User.findById(req.userID).select("-password");
-        if (!user) return res.status(400).json({ success: false, message: 'Not User Found!' })
-        return res.status(200).json({ success: true, message: user });
+        if (req.session.user) {
+            return res.status(200).json({ success: true, message: req.session.user });
+        } else {
+            return res.status(401).json({ success: false, message: 'No user logged in' });
+        }
+
     } catch (err) {
         return res.status(400).json({ success: false, message: err.message });
     }

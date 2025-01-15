@@ -7,7 +7,7 @@ email:{
 },
 password:{
     type:String,
-    required:true,
+    
 },
 name:{
     type:String,

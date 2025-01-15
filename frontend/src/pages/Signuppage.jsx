@@ -43,6 +43,7 @@ const Signuppage = () => {
       credential:response.credential
     }
     try{
+      
       await signup(details);
     console.log("Google Login Success:", response.credential);
     }catch(error){

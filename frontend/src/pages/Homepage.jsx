@@ -1,15 +1,13 @@
 import React, { useEffect } from 'react'
-import useAuthStore from '../store/useAuthStore';
+ import useAuthStore from '../store/useAuthStore';
 const Homepage = () => {
-  const{}=useAuthStore();
- useEffect(()=>{
+  const{user,checkAuth,isAuthtenicted,logout}=useAuthStore();
 
-
- })
   return (
-    <div className='text-6xl text-center'>
-    <h1>Welcome</h1>
+    <div className='mt-[80px]'>
     
+     
+
     </div>
   )
 }
