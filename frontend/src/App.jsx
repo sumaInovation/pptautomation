@@ -7,6 +7,8 @@ import Loginpage from './pages/Loginpage'
 import Signuppage from './pages/Signuppage';
 import Navbar from './components/common/Navbar'
 import useAuthSrore from './store/useAuthStore'
+import WebSocketClient from './pages/Websocketclient';
+import MachineDataForm from './pages/filterdata'
 const App = () => {
   const{checkAuth}=useAuthSrore()
 //Ever Re-rendering get user details from cooies
@@ -23,10 +25,11 @@ const App = () => {
     <BrowserRouter >
       <Navbar/>
     <Routes>
-      <Route path='/' element={<Homepage/>}/>
+      <Route path='/' element={<WebSocketClient/>}/>
       <Route path='/login' element={<Loginpage/>}/>
       <Route path='/signup' element={<Signuppage/>}/>
       <Route path='/dashboard' element={<Dashbordpage/>}/>
+      <Route path='/filter' element={<MachineDataForm/>}/>
     </Routes>
   
   </BrowserRouter>
