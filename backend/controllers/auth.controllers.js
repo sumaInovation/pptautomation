@@ -43,10 +43,12 @@ const singup = async (req, res, next) => {
 const login = async (req, res, next) => {
     try {
          const userExsist = await User.findOne({ email: req.email });
+         const userObj = userExsist.toObject(); // Convert Mongoose document to plain object
+                        delete userObj.password;
         if (!userExsist) return res.status(400).json({ success: false, message: 'Not register user' });
         if (userExsist.password != req.password) return res.status(400).json({ success: false, message: 'Incorrect Password' });
        
-            const token=jwt.sign({user:userExsist},process.env.JWT_SECRET,{expiresIn:'1h'})
+            const token=jwt.sign({user:userObj},process.env.JWT_SECRET,{expiresIn:'1h'})
              
   // Set token as a cookie
    res.cookie("authToken", token, {
