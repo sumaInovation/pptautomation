@@ -5,14 +5,13 @@ dotenv.config();
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 // Google authentication endpoint
 const VerificationGoogleTokent=async(req,res,next)=>{
-    const {credential,email,password } = req.body;
+    const {credential,email,password,name } = req.body;
     
     if(!credential){
       req.email=email;
       req.password=password;
-    
-      
-      next()
+      if(name)req.name=name;//user request to singup then we should add name also
+     next()
      }else{
         try {
             // Verify the token

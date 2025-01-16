@@ -1,4 +1,4 @@
-const fetchData = require('../controllers/googlesheet.controller')
+const fetchData = require('./fetchdata.controller')
 
 const machinedata = async (req, res) => {
      const{startDate, endDate,options}=req.body;

@@ -50,7 +50,29 @@ function MachineDataForm() {
       // Send POST request to the server
       const response = await axios.post("http://localhost:5000/machine-data", data);
       console.log("Response from server:", response.data.message);
-    } catch (error) {
+       // Assuming `response.data.message` contains your data
+        const newdata=(response.data.message).map(item=>{
+                return [item[0],item[3],item[4]]
+
+        })
+      
+      const options = [];
+      const dates=[];
+      const dataset = {};
+      
+      // Extract unique options
+      newdata.forEach(item => {
+        if (!options.includes(item[2])) options.push(item[2]);
+        if(!dates.includes(item[0]))dates.push(item[0]);
+      });
+      
+      // Group data by options
+      options.forEach(option => {
+        dataset[option] = newdata.filter(item => item[2] === option);
+      })
+       console.log(dataset["IDLE"]);
+
+     } catch (error) {
       console.error("Error sending data:", error);
     }
   };
