@@ -4,6 +4,7 @@ const todaydata = async (req, res) => {
          console.log('involked')
        try {
         const data = await fetchData("Sheet1");
+        console.log('data',data)
         if (data != null){
             
             const filteredData=data.filter(item=>{
