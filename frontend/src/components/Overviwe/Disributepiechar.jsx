@@ -37,8 +37,8 @@ const Disributepiechar = () => {
 		useEffect(() => {
 			const intervalId = setInterval(async() => {
 	             try{
-                    
-					const response = await axios.get("http://localhost:5000/today-data");
+                    const API_URL = import.meta.env.MODE === "development" ? "http://localhost:5000/today-data" : "/today-data";
+					const response = await axios.get(API_URL);
                     
                    
 					// Now you can work with your parsed JSON data
