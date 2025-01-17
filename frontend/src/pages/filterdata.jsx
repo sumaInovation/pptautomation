@@ -52,7 +52,7 @@ function MachineDataForm() {
 
     try {
       // Send POST request to the server
-      const API_URL = import.meta.env.MODE === "development" ? "wss://localhost:5000/api/auth" : "/machine-data";
+      const API_URL = import.meta.env.MODE === "development" ? "http://localhost:5000/machine-data" : "/machine-data";
       const response = await axios.post(API_URL, data);
     
        // Assuming `response.data.message` contains your data
