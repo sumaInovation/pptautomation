@@ -25,7 +25,7 @@ const auth = new google.auth.GoogleAuth({
 
 
 async function fetchData(range) {
-       console.log('here..')
+      
     const authClient = await auth.getClient();
     const sheets = google.sheets({ version: 'v4', auth: authClient });
   

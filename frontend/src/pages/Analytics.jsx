@@ -1,5 +1,4 @@
 import React from 'react'
-
 import Targetproduction from '../components/Analytics/Targetproduction'
 import Barchart from '../components/Analytics/Barchart'
 
