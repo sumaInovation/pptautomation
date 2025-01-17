@@ -36,6 +36,7 @@ async function fetchData(range) {
       });
   
       const rows = res.data.values;
+      console.log(rows)
       return rows
     } catch (err) {
       console.error('The API returned an error: ' + err);
