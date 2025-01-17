@@ -1,7 +1,7 @@
 const fetchData = require('./fetchdata.controller')
 
 const todaydata = async (req, res) => {
-     
+         console.log('involked')
        try {
         const data = await fetchData("Sheet1");
         if (data != null){
