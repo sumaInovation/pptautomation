@@ -1,11 +1,15 @@
 import React, { useState } from "react";
+import { useDataContext } from '../context/useTableContext'
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function MachineDataForm() {
+  const { setData } = useDataContext();
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [selectedOptions, setSelectedOptions] = useState([]);
-
+  const[formatedData,setTabledata]=useState(null);
+   const navigate=useNavigate();
   const options = [
     "IDLE",
     "RUNNING",
@@ -48,29 +52,19 @@ function MachineDataForm() {
 
     try {
       // Send POST request to the server
-      const response = await axios.post("http://localhost:5000/machine-data", data);
-      console.log("Response from server:", response.data.message);
+      const API_URL = import.meta.env.MODE === "development" ? "wss://localhost:5000/api/auth" : "/machine-data";
+      const response = await axios.post(API_URL, data);
+    
        // Assuming `response.data.message` contains your data
         const newdata=(response.data.message).map(item=>{
                 return [item[0],item[3],item[4]]
 
         })
+        setData(newdata);
+        navigate('/analys')
+
+         
       
-      const options = [];
-      const dates=[];
-      const dataset = {};
-      
-      // Extract unique options
-      newdata.forEach(item => {
-        if (!options.includes(item[2])) options.push(item[2]);
-        if(!dates.includes(item[0]))dates.push(item[0]);
-      });
-      
-      // Group data by options
-      options.forEach(option => {
-        dataset[option] = newdata.filter(item => item[2] === option);
-      })
-       console.log(dataset["IDLE"]);
 
      } catch (error) {
       console.error("Error sending data:", error);
@@ -78,6 +72,8 @@ function MachineDataForm() {
   };
 
   return (
+    <>
+    {formatedData?"":
     <div className="max-w-lg mx-auto mt-[120px] text-black p-5 bg-white rounded-lg shadow-md">
       <h2 className="text-2xl font-semibold mb-4">Machine Data Form</h2>
       <form onSubmit={handleSubmit}>
@@ -142,7 +138,10 @@ function MachineDataForm() {
         </button>
       </form>
     </div>
+          }
+          </>
   );
+
 }
 
 export default MachineDataForm;
