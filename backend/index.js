@@ -9,7 +9,7 @@ const authRoutes = require('./Routes/auth.route');
 const googlesgeetRoute=require('./Routes/googlesheet.routes')
 const createWebSocketServer = require('./server/websocketServer');
 const mongoose  = require('mongoose');
-const PORT = process.env.PORT||5000;
+const PORT = process.env.PORT||5002;
 //use middleware
 app.use(express.json())//allows to allowing req.body
 app.use(cookiesparser())//allows pasre cookies

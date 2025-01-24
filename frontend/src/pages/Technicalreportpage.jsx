@@ -28,7 +28,7 @@ const InvoiceReport = () => {
 
   // Data for Pie Chart
   const pieData = {
-    labels: ['Product A', 'Product B', 'Product C'],
+    labels: ['RUNNING', 'DOWNTIME', 'POWER-OFF'],
     datasets: [
       {
         data: [30, 45, 25],
@@ -42,7 +42,7 @@ const InvoiceReport = () => {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
     datasets: [
       {
-        label: 'Revenue',
+        label: 'Length(M)',
         data: [1000, 1500, 1200, 2000, 1800],
         borderColor: '#4caf50',
         backgroundColor: '#a5d6a7',
@@ -53,9 +53,9 @@ const InvoiceReport = () => {
 
   // Table data
   const tableData = [
-    { item: '01/05/2025', quantity: 15, price: '5'},
-    { item: '01/06/2025', quantity: 30, price: '$20'},
-    { item: '01/07/2025', quantity: 20, price: '$15'},
+    { item: '01/05/2025', quantity: 120, price: '5'},
+    { item: '01/06/2025', quantity: 300, price: '20'},
+    { item: '01/07/2025', quantity: 200, price: '15'},
   ];
 
   // Function to download the report as a PDF
@@ -79,7 +79,7 @@ const InvoiceReport = () => {
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen py-10">
+    <div className="bg-gray-100 min-h-screen py-10 mt-[80px]">
       <div
         ref={reportRef}
         className="bg-white p-8 rounded-lg shadow-lg max-w-4xl mx-auto text-black"
