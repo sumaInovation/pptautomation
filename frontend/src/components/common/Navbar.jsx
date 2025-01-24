@@ -34,7 +34,7 @@ export default function Navbar() {
       { name: "Inventory", href: "#", current: false },
       { name: "Analytics", href: "/analytics", current: false },
       { name: "Sign Up", href: "/signup", current: false },
-      { name: "Analys", href: "/technical", current: false },
+      
        // The Dashboard link is conditionally included based on the login state
        ...(!isAuthtenicted
         ? [{ name: "SignIn", href: "/login", current: false }]
