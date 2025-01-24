@@ -18,9 +18,12 @@ const App = () => {
   const { user, checkAuth, isAuthtenicted, logout } = useAuthStore();
   //Ever Re-rendering get user details from cooies
  useEffect(()=>{
-     console.log(isAuthtenicted)
+  checkAuth();
+  console.log(user);
+
  },[])
 
+ 
   // Protected Route Component
   const PrivateRoute = ({ children }) => {
     return isAuthtenicted ? children : <Navigate to="/signin" />;

@@ -56,7 +56,8 @@ const useAuthStore=create((set)=>({
            );
         
         set({user:response.data.message.user,isCheckingAuth:false,isAuthtenicted:true});
-          console.log(isAuthtenicted)
+      
+         
        
 
      }catch(err){
