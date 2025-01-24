@@ -136,12 +136,15 @@ const DynamicReport = () => {
 
       startAngle = endAngle;
 
-      return `
+    
+        return `
           <path d="${pathData}" fill="hsl(${index * 60}, 70%, 50%)" />
           <text x="${labelX}" y="${labelY}" fill="#000" font-size="12" text-anchor="middle" dominant-baseline="middle">
             ${slice.label} (${percentage})
           </text>
         `;
+      
+      
     });
 
     // Render the SVG

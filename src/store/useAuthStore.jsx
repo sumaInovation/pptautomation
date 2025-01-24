@@ -54,9 +54,9 @@ const useAuthStore=create((set)=>({
         
             {withCredentials:true}
            );
-         console.log(response.data.message.user);
+        
         set({user:response.data.message.user,isCheckingAuth:false,isAuthtenicted:true});
-       
+          console.log(isAuthtenicted)
        
 
      }catch(err){
