@@ -6,28 +6,42 @@ const DynamicReport = () => {
   const { data } = useDataContext();
   const svgRefLineChart = useRef(null);
   const svgRefPieChart = useRef(null);
-
   const lineData = [];
+  const pieData=[];
+  const tableData=[];
   data.forEach((item) => {
     if (!lineData.some((i) => i.date == item[0]))
         lineData.push({ date: item[0], value: 0 });
+    if(!pieData.some(j=>j.label==item[2]))
+      pieData.push({label:item[2],value:0});
+    if(!tableData.some(k=>k.date==item[0]))
+      tableData.push({date:item[0],runtime:0,downtime:0})
     // Find and update an element
     const elementToUpdate = lineData.find((i) => i.date === item[0]);
 
     if (elementToUpdate) {
       if(item[2]==="RUNNING")elementToUpdate.value+=parseInt(item[1],10);
     }
+    // Find and update an element
+    const elementToUpdate1 = pieData.find((i) => i.label === item[2]);
+
+    if (elementToUpdate1) {
+      elementToUpdate1.value+=parseInt(item[1],10);
+    }
+     // Find and update an element
+     const elementToUpdate2 = tableData.find((k) => k.date === item[0]);
+
+     if (elementToUpdate2) {
+      if(item[2]==="RUNNING"){
+        elementToUpdate2.runtime+=parseInt(item[1],10);
+      }else{
+        elementToUpdate2.downtime+=parseInt(item[1],10);
+      }
+      
+     }
   });
-  console.log('data',lineData)
-
-
-  const [pieData, setPieData] = useState([
-    { label: "Task 1", value: 100 },
-    { label: "Task 2", value: 200 },
-    { label: "Task 3", value: 150 },
-  ]);
-
-  useEffect(() => {
+ 
+ useEffect(() => {
     // Line Chart SVG Rendering
     const svgElementLine = svgRefLineChart.current;
     const lineChartWidth = 500;
@@ -179,11 +193,12 @@ const DynamicReport = () => {
             <thead style="background-color: #2c3e50; color: white;">
               <tr>
                 <th style="padding: 12px; border: 1px solid #ddd;">Date</th>
-                <th style="padding: 12px; border: 1px solid #ddd;">Value</th>
+                <th style="padding: 12px; border: 1px solid #ddd;">Runtime</th>
+                 <th style="padding: 12px; border: 1px solid #ddd;">Downtime</th>
               </tr>
             </thead>
             <tbody>
-              ${lineData
+              ${tableData
                 .map(
                   (row, index) => `
                     <tr style="background-color: ${
@@ -193,7 +208,10 @@ const DynamicReport = () => {
                         row.date
                       }</td>
                       <td style="padding: 12px; border: 1px solid #ddd;">${
-                        row.value
+                        row.runtime
+                      }</td>
+                        <td style="padding: 12px; border: 1px solid #ddd;">${
+                        row.downtime
                       }</td>
                     </tr>
                   `
@@ -205,8 +223,8 @@ const DynamicReport = () => {
         
         <!-- Footer Section -->
         <footer style="margin-top: 50px; font-size: 14px; text-align: center; color: #7f8c8d;">
-          <p><strong>Dynamic Solutions Inc.</strong></p>
-          <p>Contact: support@dynamicsolutions.com | Phone: +1 (123) 456-7890</p>
+          <p><strong>PPT Inovation Dept.</strong></p>
+          <p>Contact: sumaautomationlk@gmail.com | Phone: +94 762183549</p>
           <p>© 2025 Dynamic Solutions Inc. All rights reserved.</p>
         </footer>
       </div>
@@ -225,13 +243,15 @@ const DynamicReport = () => {
   };
 
   return (
+    <>
     <div className="p-4 mt-[80px] text-black">
-      <div className="flex flex-col md:flex-row justify-between">
+      <div className="flex flex-col md:flex-row justify-between mt-[-1000px]">
         <div>
           <h2 className="text-lg font-semibold mb-2">Line Chart</h2>
           <div ref={svgRefLineChart}></div>
         </div>
         <div>
+        
           <h2 className="text-lg font-semibold mb-2">Pie Chart</h2>
           <div ref={svgRefPieChart}></div>
         </div>
@@ -259,13 +279,16 @@ const DynamicReport = () => {
         </table>
       </div>
 
-      <button
-        onClick={generatePDF}
-        className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-      >
-        Download PDF
+     
+    </div>
+    <div className="relative w-full   p-4">
+      {/* Button in the right corner */}
+      <button className="absolute top-0 right-0 m-2 bg-blue-500 text-white px-4 py-2 rounded"
+      onClick={generatePDF}>
+        Print Report
       </button>
     </div>
+    </>
   );
 };
 
