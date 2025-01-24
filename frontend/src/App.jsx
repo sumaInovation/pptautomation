@@ -12,7 +12,7 @@ import Overviwepage from './pages/Overviwepage'
 import MachineDataForm from './pages/filterdata'
 import Analytics from './pages/Analytics'
 import Technicalreport from './pages/Technicalreportpage'
-import Test from './pages/test.jsx';
+
 const App = () => {
   const{checkAuth}=useAuthSrore()
 //Ever Re-rendering get user details from cooies
@@ -38,7 +38,7 @@ const App = () => {
       <Route path='/analys' element={<Analysispage/>}/>
       <Route path='/analytics' element={<Analytics/>}/>
       <Route path='/technical' element={<Technicalreport/>}/>
-      <Route path='/test' element={<Test/>}/>
+    
     
     </Routes>
   
