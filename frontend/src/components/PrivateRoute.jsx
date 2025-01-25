@@ -6,8 +6,9 @@ const PrivateRoute = ({ children }) => {
 
   // If user is not authenticated, redirect to login page
   if (!isAuthenticated) {
-    alert("Please login frist ")
+  
     return <Navigate to="/login" />
+    
   }
 
   // If authenticated, render the children components (i.e., the protected page)
