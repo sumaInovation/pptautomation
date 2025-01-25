@@ -5,14 +5,17 @@ import StatCard from '../components/common/StatCard'
 import RealTimeLineChart from '../components/Overviwe/RealTimeLineChart'
 import Disributepiechar from '../components/Overviwe/Disributepiechar'
 import { useWebSocket } from '../context/WebSocketContext';
+import axios from 'axios';
 
 
 const Overviwepage = () => {
 	const[IsMachineRun,setIsMachineRun]=useState(false);
 	const [todatproduction, setTodayproduction] = useState(0);
+	const [thisMonthProduction,setThisMonthProduction]=useState(0);
 	const { messages } = useWebSocket();
 	const[length,setLength]=useState(0)
 	const[previousState,setPreviousState]=useState('IDLE');
+	const API_URL = import.meta.env.MODE === "development" ? "http://localhost:5000/thismonth-production" : '/thismonth-production';
    
 	useEffect(() => {
 		
@@ -30,7 +33,23 @@ const Overviwepage = () => {
         
 
 
-	}, [messages])
+	}, [messages]);
+	useEffect(()=>{
+		axios.get(API_URL, {
+			withCredentials:true
+		  })
+			.then((response) => {
+				console.log(response.data.message)
+				setThisMonthProduction(response.data.message);
+			 
+			})
+			.catch((err) => {
+			  
+			});
+		
+
+	},[])
+
 	return (
 		
 		<div className='flex-1 overflow-y-auto  p-4 z-0 mt-[75px] '>
@@ -45,7 +64,7 @@ const Overviwepage = () => {
 				>
 					<StatCard name='Machine State' icon={Fuel} value={IsMachineRun==true?"Running":"Stop"} color={IsMachineRun==true?"#3f8f29":"#de1a24"} />
 					<StatCard name='Today Production' icon={Target} value={length} color='#8B5CF6' />
-					<StatCard name='This Month Production' icon={ShoppingBag} value='5672M' color='#EC4899' />
+					<StatCard name='This Month Production' icon={ShoppingBag} value={`${thisMonthProduction}M`} color='#EC4899' />
 					<StatCard name='Efficency of Machine' icon={BarChart2} value='62.2%' color='#10B981' />
 				</motion.div>
 
