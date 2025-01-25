@@ -248,7 +248,7 @@ const DynamicReport = () => {
   return (
     <>
     <div className="p-4 mt-[80px] text-black">
-      <div className="flex flex-col md:flex-row justify-between mt-[-1000px]">
+      <div className="flex flex-col md:flex-row justify-between mt-[-2000px]">
         <div>
           <h2 className="text-lg font-semibold mb-2">Line Chart</h2>
           <div ref={svgRefLineChart}></div>
