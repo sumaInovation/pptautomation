@@ -20,7 +20,7 @@ const useAuthStore=create((set)=>({
        
        set({user:response.data.user,isAuthtenicted:true,isLoading:false});
       }catch(error){
-      set({error:error.response.data.message,isLoading:false})
+        set({error:error.response.data.message,isLoading:false})
         throw error;//to catch error after run function
 
       }
@@ -56,11 +56,13 @@ const useAuthStore=create((set)=>({
            );
         
         set({user:response.data.message.user,isCheckingAuth:false,isAuthtenicted:true});
-          console.log(isAuthtenicted)
+        localStorage.setItem("auth_token", "your-token-here");
+      
+         
        
 
      }catch(err){
-      
+      localStorage.removeItem("auth_token");
          //set({error:err.response.data.message|| null,isCheckingAuth:false,isAuthtenicted:false});
         //throw err
      }
@@ -73,6 +75,7 @@ const useAuthStore=create((set)=>({
            );
         
         set({user:null,isAuthtenicted:false});
+        localStorage.removeItem("auth_token");
 
       }catch(err){
          set({error:err.response.message})
