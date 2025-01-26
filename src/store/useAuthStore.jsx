@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { create } from "zustand";
 const API_URL = import.meta.env.MODE === "development" ? "http://localhost:5000/api/auth" : "/api/auth";
 axios.defaults.withCredentials=true;
@@ -33,13 +34,19 @@ const useAuthStore=create((set)=>({
          details,
             {withCredentials:true}
            );
-         console.log(response.data.message);
+         
          set({isLoading:false})
+         set({error:response.data.message});
+
+         if (response.data.success) {
+            return true;
+          }
+          throw new Error('Login failed');
 
     }catch(err){
-        set({isLoading:false})
+         set({isLoading:false})
          set({error:err.response.data.message})
-         throw err;
+         throw new Error('Login failed');
     }
 
 
