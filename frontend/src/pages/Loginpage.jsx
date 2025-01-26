@@ -20,6 +20,8 @@ const Login = () => {
   };
 
   const handleLogin =async (e) => {
+
+    
     e.preventDefault();
    // Add your API call for login here
     try{
@@ -28,7 +30,11 @@ const Login = () => {
         password:formData.password
        }
       await login(details);
-      navigate("/dashboard")
+        
+      console.log('Login successful, navigating to dashboard');
+    
+      // After login, navigate to the dashboard
+      navigate("/dashboard");
     }catch(err){
 
     }
@@ -42,10 +48,10 @@ const Login = () => {
     
   try{
         await login(details);
-        console.log('successfully google login!')
-        navigate('/dashboard')
+        navigate('/')
      }catch(error){
-    console.log('error google login')
+    //console.log('error google login')
+    console.log(error);
 
   }
   };

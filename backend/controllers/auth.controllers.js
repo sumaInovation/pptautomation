@@ -43,9 +43,10 @@ const singup = async (req, res, next) => {
 const login = async (req, res, next) => {
     try {
          const userExsist = await User.findOne({ email: req.email });
+         if (!userExsist) return res.status(400).json({ success: false, message: 'Not register user' });
          const userObj = userExsist.toObject(); // Convert Mongoose document to plain object
                         delete userObj.password;
-        if (!userExsist) return res.status(400).json({ success: false, message: 'Not register user' });
+       
         if (userExsist.password != req.password) return res.status(400).json({ success: false, message: 'Incorrect Password' });
        
             const token=jwt.sign({user:userObj},process.env.JWT_SECRET,{expiresIn:'1h'})
@@ -57,8 +58,9 @@ const login = async (req, res, next) => {
     sameSite: "Strict", // Protect against CSRF
     maxAge: 3600000, // 1 hour in milliseconds
   });
-return res.json({ message: "Login successful" });
+    res.status(200).json({success:true,message:"Login success"})
 } catch (err) {
+
     return res.status(400).json({ success: false, message: err.message });
 }
 
