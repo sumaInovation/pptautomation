@@ -6,7 +6,7 @@ import {Loader } from "lucide-react";
 
 const Login = () => {
   const navigate=useNavigate()
-  const{login,isLoading,error}=useAuthSrore()
+  const{login,isLoading,error,checkAuth}=useAuthSrore()
   
   const [formData, setFormData] = useState({
     email: "",
@@ -30,6 +30,7 @@ const Login = () => {
         password:formData.password
        }
       await login(details);
+      await  checkAuth();
         
       console.log('Login successful, navigating to dashboard');
     
@@ -48,7 +49,8 @@ const Login = () => {
     
   try{
         await login(details);
-        navigate('/')
+        await checkAuth();
+        navigate("/dashboard");
      }catch(error){
     //console.log('error google login')
     console.log(error);
