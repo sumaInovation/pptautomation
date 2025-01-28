@@ -16,9 +16,9 @@ import PrivateRoute from './components/PrivateRoute'; // Import the PrivateRoute
 const App = () => {
   return (
     <DataProvider>
-     
-        {/* <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}> */}
-        <GoogleOAuthProvider clientId="39253442113-0vh548enso8si0f1pjg27cbensc6qpba.apps.googleusercontent.com">
+        
+        <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+        {/* <GoogleOAuthProvider clientId="39253442113-0vh548enso8si0f1pjg27cbensc6qpba.apps.googleusercontent.com"> */}
         <BrowserRouter>
           <Navbar />
           <Routes>

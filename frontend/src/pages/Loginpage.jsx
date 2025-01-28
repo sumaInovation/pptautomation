@@ -23,7 +23,7 @@ const Login = () => {
 
     
     e.preventDefault();
-   // Add your API call for login here
+   // Add your API call for login here ..............
     try{
        const details={
         email:formData.email,
