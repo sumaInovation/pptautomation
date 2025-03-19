@@ -15,8 +15,9 @@ app.use(express.json())//allows to allowing req.body
 app.use(cookiesparser())//allows pasre cookies
 app.use(cors({
     origin:'http://localhost:5173',
-    credentials:true
+    credentials:true    
 }))
+    
 
 
 app.use('/api/auth', authRoutes);

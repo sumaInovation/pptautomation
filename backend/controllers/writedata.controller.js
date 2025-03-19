@@ -32,14 +32,26 @@ const auth = new google.auth.GoogleAuth({
 
 async function WriteDataOnGoogleSheet(data) {
 
+  function padTime(timeStr) {
+    return timeStr.split(':').map(part => part.padStart(2, '0')).join(':');
+  }
+
+
+
   var RANGE = "Sheet1"
   const{start,end,reason}=data;
-  const time1Obj1 = new Date(`1970-01-01T${start}Z`);
-  const time1Ob2 = new Date(`1970-01-01T${end}Z`);
-  const diffInSeconds = (time1Ob2 - time1Obj1) / 1000;
+
+     // Format time strings to standard "HH:MM:SS" format
+const formattedStart = padTime(start);
+const formattedEnd = padTime(end);
+
+  // Convert formatted time strings to Date objects
+const time1Obj1 = new Date(`1970-01-01T${formattedStart}Z`);
+const time1Obj2 = new Date(`1970-01-01T${formattedEnd}Z`);
+const diffInSeconds = (time1Obj2  - time1Obj1) / 1000;
 
   const keys = [
-
+  
     [
       new Date().toLocaleDateString(),
       start,
@@ -64,7 +76,9 @@ async function WriteDataOnGoogleSheet(data) {
       valueInputOption: "USER_ENTERED",
       requestBody,
     });
-    console.log('write data:', response.data);
+    //console.log('write data:', response.data);
+   
+
   } catch (error) {
     console.error('Error appending data:', error);
   }
