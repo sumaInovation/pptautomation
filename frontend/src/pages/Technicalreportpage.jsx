@@ -250,30 +250,30 @@ const DynamicReport = () => {
     <div className="p-4 mt-[80px] text-black">
       <div className="flex flex-col md:flex-row justify-between mt-[-2000px]">
         <div>
-          <h2 className="text-lg font-semibold mb-2">Line Chart</h2>
+          <h2 className="mb-2 text-lg font-semibold">Line Chart</h2>
           <div ref={svgRefLineChart}></div>
         </div>
         <div>
         
-          <h2 className="text-lg font-semibold mb-2">Pie Chart</h2>
+          <h2 className="mb-2 text-lg font-semibold">Pie Chart</h2>
           <div ref={svgRefPieChart}></div>
         </div>
       </div>
 
       <div className="mt-4">
-        <h2 className="text-lg font-semibold mb-2">Data Table</h2>
-        <table className="table-auto w-full border-collapse border border-gray-400">
+        <h2 className="mb-2 text-lg font-semibold">Data Table</h2>
+        <table className="w-full border border-collapse border-gray-400 table-auto">
           <thead>
             <tr>
-              <th className="border border-gray-400 px-4 py-2">Date</th>
-              <th className="border border-gray-400 px-4 py-2">Value</th>
+              <th className="px-4 py-2 border border-gray-400">Date</th>
+              <th className="px-4 py-2 border border-gray-400">Value</th>
             </tr>
           </thead>
           <tbody>
             {lineData.map((row, index) => (
               <tr key={index}>
-                <td className="border border-gray-400 px-4 py-2">{row.date}</td>
-                <td className="border border-gray-400 px-4 py-2">
+                <td className="px-4 py-2 border border-gray-400">{row.date}</td>
+                <td className="px-4 py-2 border border-gray-400">
                   {row.value}
                 </td>
               </tr>
@@ -284,9 +284,9 @@ const DynamicReport = () => {
 
      
     </div>
-    <div className="relative w-full   p-4">
+    <div className="relative w-full p-4">
       {/* Button in the right corner */}
-      <button className="absolute top-0 right-0 m-2 bg-blue-500 text-white px-4 py-2 rounded"
+      <button className="absolute top-0 right-0 px-4 py-2 m-2 text-white bg-blue-500 rounded"
       onClick={generatePDF}>
         Print Report
       </button>
