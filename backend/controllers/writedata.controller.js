@@ -76,7 +76,7 @@ const diffInSeconds = (time1Obj2  - time1Obj1) / 1000;
       valueInputOption: "USER_ENTERED",
       requestBody,
     });
-    //console.log('write data:', response.data);
+    console.log('write data:', response.data);
    
 
   } catch (error) {

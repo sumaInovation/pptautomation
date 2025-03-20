@@ -16,6 +16,7 @@ const Disributepiechar = () => {
 		{ name: 'SPOOL EMPTHY', value: 0 },
 		{ name: 'COPPER BROKEN', value: 0 },
 		{ name: 'OTHERS', value: 0 },
+		{ name: 'TAPE DETECT', value: 0 },
 	]);
 
 	// Filter out data with value 0
@@ -77,12 +78,12 @@ const Disributepiechar = () => {
 
 	return (
 		<motion.div
-			className='bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl p-6 border border-gray-700'
+			className='p-6 bg-gray-800 bg-opacity-50 border border-gray-700 shadow-lg backdrop-blur-md rounded-xl'
 			initial={{ opacity: 0, y: 20 }}
 			animate={{ opacity: 1, y: 0 }}
 			transition={{ delay: 0.3 }}
 		>
-			<h2 className='text-lg font-medium mb-4 text-gray-100'>Today Runtime Vs Downtime</h2>
+			<h2 className='mb-4 text-lg font-medium text-gray-100'>Today Runtime Vs Downtime</h2>
 			<div className='h-80'>
 				<ResponsiveContainer width={"100%"} height={"100%"}>
 					<PieChart>
