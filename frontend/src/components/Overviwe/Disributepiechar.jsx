@@ -36,7 +36,7 @@ const Disributepiechar = () => {
 			try {
 				const API_URL = import.meta.env.MODE === "development" ? "http://localhost:5000/today-data" : "/today-data";
 				const response = await axios.get(API_URL);
-
+                 
 				// Processing incoming data from Google Sheet
 				const reason = [];
 				(response.data.message).map(item => {

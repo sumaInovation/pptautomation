@@ -5,13 +5,14 @@ const machinedata = async (req, res) => {
        try {
         const data = await fetchData("Sheet1");
         if (data != null){
-            
+          
             const filteredData=data.filter(item=>{
                 const isWithinDataRange=startDate<=item[0] && endDate>=item[0];
                 const isWithinOptionRange=options.includes(item[4])
                 return isWithinDataRange && isWithinOptionRange
             })
-        
+            console.log(req.body)
+            console.log(filteredData);
             return res.status(200).json({ success: true, message: filteredData });
         }
         return res.status(400).json({ success: false, message: 'No recoded data!' });
