@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef, useState } from "react";
 import html2pdf from "html2pdf.js";
 import { useDataContext } from "../context/useTableContext";
@@ -109,7 +110,7 @@ const DynamicReport = () => {
     const svgElementPie = svgRefPieChart.current;
     const pieChartWidth = 300;
     const pieChartHeight = 300;
-    const radius = Math.min(pieChartWidth, pieChartHeight) / 2;
+    const radius = pieChartWidth / 2;
     const pieTotal = pieData.reduce((sum, item) => sum + item.value, 0);
     let startAngle = 0; // Initialize startAngle here
     const pieSlices = pieData.map((slice, index) => {
@@ -123,36 +124,35 @@ const DynamicReport = () => {
 
       const pathData = `M${radius},${radius} L${x1},${y1} A${radius},${radius} 0 ${largeArcFlag},1 ${x2},${y2} Z`;
 
-      // Calculate label position - now inside the slice (closer to center)
+      // Calculate label position
       const midAngle = startAngle + sliceAngle / 2;
-      const labelRadius = radius * 0.5; // Reduced radius for inner placement
-      const labelX = radius + labelRadius * Math.cos((Math.PI * midAngle) / 180);
-      const labelY = radius + labelRadius * Math.sin((Math.PI * midAngle) / 180);
+      const labelX =
+        radius + (radius / 1.5) * Math.cos((Math.PI * midAngle) / 180);
+      const labelY =
+        radius + (radius / 1.5) * Math.sin((Math.PI * midAngle) / 180);
 
       // Format percentage
       const percentage = ((slice.value / pieTotal) * 100).toFixed(1) + "%";
 
       startAngle = endAngle;
 
-      return `
-        <g>
+    
+        return `
           <path d="${pathData}" fill="hsl(${index * 60}, 70%, 50%)" />
-          <text x="${labelX}" y="${labelY}" fill="white" font-size="10" font-weight="bold" text-anchor="middle" dominant-baseline="middle">
-            ${percentage}
+          <text x="${labelX}" y="${labelY}" fill="#000" font-size="09" text-anchor="middle" dominant-baseline="middle">
+            ${slice.label} (${percentage})
           </text>
-          <text x="${labelX}" y="${labelY + 15}" fill="white" font-size="8" text-anchor="middle" dominant-baseline="middle">
-            ${slice.label}
-          </text>
-        </g>
-      `;
+        `;
+      
+      
     });
 
     // Render the SVG
     svgElementPie.innerHTML = `
-      <svg width="${pieChartWidth}" height="${pieChartHeight}" viewBox="0 0 ${pieChartWidth} ${pieChartHeight}">
-        ${pieSlices.join("")}
-      </svg>
-    `;
+        <svg width="${pieChartWidth}" height="${pieChartHeight}" viewBox="0 0 ${pieChartWidth} ${pieChartHeight}">
+          ${pieSlices.join("")}
+        </svg>
+      `;
   }, [lineData, pieData]);
 
   const generatePDF = () => {
@@ -248,12 +248,13 @@ const DynamicReport = () => {
   return (
     <>
     <div className="p-4 mt-[80px] text-black">
-      <div className="flex flex-col justify-between md:flex-row">
+      <div className="flex flex-col md:flex-row justify-between mt-[-2000px]">
         <div>
           <h2 className="mb-2 text-lg font-semibold">Line Chart</h2>
           <div ref={svgRefLineChart}></div>
         </div>
         <div>
+        
           <h2 className="mb-2 text-lg font-semibold">Pie Chart</h2>
           <div ref={svgRefPieChart}></div>
         </div>
@@ -280,14 +281,13 @@ const DynamicReport = () => {
           </tbody>
         </table>
       </div>
+
+     
     </div>
-    
-    {/* Fixed button at bottom right */}
-    <div className="fixed bottom-4 right-4">
-      <button 
-        className="px-6 py-3 text-white bg-blue-600 rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-        onClick={generatePDF}
-      >
+    <div className="relative w-full p-4">
+      {/* Button in the right corner */}
+      <button className="absolute top-0 right-0 px-4 py-2 m-2 text-white bg-blue-500 rounded"
+      onClick={generatePDF}>
         Print Report
       </button>
     </div>
@@ -296,3 +296,4 @@ const DynamicReport = () => {
 };
 
 export default DynamicReport;
+
