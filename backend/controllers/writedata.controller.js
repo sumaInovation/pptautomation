@@ -48,7 +48,7 @@ const formattedEnd = padTime(end);
   // Convert formatted time strings to Date objects
 const time1Obj1 = new Date(`1970-01-01T${formattedStart}Z`);
 const time1Obj2 = new Date(`1970-01-01T${formattedEnd}Z`);
-const diffInSeconds = (time1Obj2  - time1Obj1) / 1000;
+const diffInSeconds = (time1Obj2  - time1Obj1) / 60000;//minutes
 
   const keys = [
   
