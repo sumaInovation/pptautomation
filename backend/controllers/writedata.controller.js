@@ -39,7 +39,7 @@ async function WriteDataOnGoogleSheet(data) {
 
 
   var RANGE = "Sheet1"
-  const{start,end,reason}=data;
+  const{start,end,reason,count}=data;
 
      // Format time strings to standard "HH:MM:SS" format
 const formattedStart = padTime(start);
@@ -57,7 +57,8 @@ const diffInSeconds = (time1Obj2  - time1Obj1) / 60000;//minutes
       start,
       end,
       diffInSeconds,
-      reason
+      reason,
+      count
     ]
   ]
 
