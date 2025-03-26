@@ -8,7 +8,7 @@ const ThisMonthProduction=async(req ,res)=>{
     // Get the current date and month
 const currentMonth = moment().format('MM'); // Current month in MM format
 const currentYear = moment().format('YYYY'); // Current year in YYYY format
-     console.log(data)    
+       
        // Calculate the sum of the current month's values
 const sumCurrentMonth = data.reduce((sum, item) => {
     // Check if the date is in the current month and year
@@ -16,7 +16,7 @@ const sumCurrentMonth = data.reduce((sum, item) => {
     const paddedMonth = month.padStart(2, '0'); // e.g., "1" becomes "01"
     console.log(month,currentMonth)
     if (paddedMonth === currentMonth && year === currentYear)  {
-      return sum + parseInt(item[3],10);
+      return sum + parseInt(item[5],10);
     }
     return sum;
   }, 0);
