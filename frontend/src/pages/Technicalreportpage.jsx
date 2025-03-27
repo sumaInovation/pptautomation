@@ -35,9 +35,9 @@ const DynamicReport = () => {
 
      if (elementToUpdate2) {
       if(item[2]==="RUNNING"){
-        elementToUpdate2.runtime+=parseFloat(item[1]);
+        elementToUpdate2.runtime+=parseFloat(item[1].toFixed(2));
       }else{
-        elementToUpdate2.downtime+=parseFloat(item[1]);
+        elementToUpdate2.downtime+=parseFloat(item[1].toFixed(2));
       }
       
      }
