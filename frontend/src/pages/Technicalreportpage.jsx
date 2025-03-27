@@ -213,10 +213,10 @@ const DynamicReport = () => {
                         row.date
                       }</td>
                       <td style="padding: 12px; border: 1px solid #ddd;">${
-                        row.runtime
+                        row.runtime.toFixed(2)
                       }</td>
                         <td style="padding: 12px; border: 1px solid #ddd;">${
-                        row.downtime
+                        row.downtime.toFixed(2)
                       }</td>
                     </tr>
                   `

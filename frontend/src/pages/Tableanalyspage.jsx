@@ -86,7 +86,7 @@ const Analysispage = () => {
                   <thead>
                     <tr className="bg-gray-600">
                       <th className="p-2 border">Date</th>
-                      <th className="p-2 border">Duration(Min)</th>
+                      <th className="p-2 border">Duration.toFixed(2)(Min)</th>
                     </tr>
                   </thead>
                   <tbody>
