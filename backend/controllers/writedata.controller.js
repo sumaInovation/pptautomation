@@ -30,28 +30,93 @@ const auth = new google.auth.GoogleAuth({
 
 
 
+// async function WriteDataOnGoogleSheet(data) {
+
+//   function padTime(timeStr) {
+//     return timeStr.split(':').map(part => part.padStart(2, '0')).join(':');
+//   }
+
+
+
+//   var RANGE = "Sheet1"
+//   const{start,end,reason,count}=data;
+
+//      // Format time strings to standard "HH:MM:SS" format
+// const formattedStart = padTime(start);
+// const formattedEnd = padTime(end);
+
+//   // Convert formatted time strings to Date objects
+// const time1Obj1 = new Date(`1970-01-01T${formattedStart}Z`);
+// const time1Obj2 = new Date(`1970-01-01T${formattedEnd}Z`);
+
+// const diffInSeconds = (time1Obj2  - time1Obj1) / 60000;//minutes
+
+//   const keys = [
+  
+//     [
+//       new Date().toLocaleDateString(),
+//       start,
+//       end,
+//       diffInSeconds,
+//       reason,
+//       count
+//     ]
+//   ]
+
+//  const requestBody = {
+//     values: keys
+//   }
+
+
+//   // Write row(s) to spreadsheet
+//   const sheets = google.sheets({ version: 'v4', auth });
+//   try {
+//     const response = await sheets.spreadsheets.values.append({
+//       auth,
+//       spreadsheetId: SHEET_ID,
+//       range: RANGE,
+//       valueInputOption: "USER_ENTERED",
+//       requestBody,
+//     });
+//     console.log('write data:', response.data);
+   
+
+//   } catch (error) {
+//     console.error('Error appending data:', error);
+//   }
+
+// }
+
+// module.exports = WriteDataOnGoogleSheet
+
+
+
+
+
 async function WriteDataOnGoogleSheet(data) {
 
   function padTime(timeStr) {
     return timeStr.split(':').map(part => part.padStart(2, '0')).join(':');
   }
 
+  const { start, end, reason, count } = data;
 
-
-  var RANGE = "Sheet1"
-  const{start,end,reason,count}=data;
-
-     // Format time strings to standard "HH:MM:SS" format
-const formattedStart = padTime(start);
-const formattedEnd = padTime(end);
+  // Format time strings to standard "HH:MM:SS" format
+  const formattedStart = padTime(start);
+  const formattedEnd = padTime(end);
 
   // Convert formatted time strings to Date objects
-const time1Obj1 = new Date(`1970-01-01T${formattedStart}Z`);
-const time1Obj2 = new Date(`1970-01-01T${formattedEnd}Z`);
-const diffInSeconds = (time1Obj2  - time1Obj1) / 60000;//minutes
+  const time1Obj1 = new Date(`1970-01-01T${formattedStart}Z`);
+  let time1Obj2 = new Date(`1970-01-01T${formattedEnd}Z`);
+
+  // If end time is earlier than start time (i.e., crosses midnight), adjust by adding 24 hours to the end time
+  if (time1Obj2 < time1Obj1) {
+    time1Obj2.setDate(time1Obj2.getDate() + 1);  // Add one day to the end time
+  }
+
+  const diffInSeconds = (time1Obj2 - time1Obj1) / 60000; // Difference in minutes
 
   const keys = [
-  
     [
       new Date().toLocaleDateString(),
       start,
@@ -60,12 +125,11 @@ const diffInSeconds = (time1Obj2  - time1Obj1) / 60000;//minutes
       reason,
       count
     ]
-  ]
+  ];
 
- const requestBody = {
+  const requestBody = {
     values: keys
-  }
-
+  };
 
   // Write row(s) to spreadsheet
   const sheets = google.sheets({ version: 'v4', auth });
@@ -73,13 +137,11 @@ const diffInSeconds = (time1Obj2  - time1Obj1) / 60000;//minutes
     const response = await sheets.spreadsheets.values.append({
       auth,
       spreadsheetId: SHEET_ID,
-      range: RANGE,
+      range: "Sheet1",  // Ensure you use the correct sheet name
       valueInputOption: "USER_ENTERED",
       requestBody,
     });
     console.log('write data:', response.data);
-   
-
   } catch (error) {
     console.error('Error appending data:', error);
   }
