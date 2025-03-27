@@ -20,7 +20,9 @@ const DynamicReport = () => {
     const elementToUpdate = lineData.find((i) => i.date === item[0]);
 
     if (elementToUpdate) {
-      if(item[2]==="RUNNING")elementToUpdate.value+=parseInt(item[1],10);
+      //if(item[2]==="RUNNING")elementToUpdate.value+=parseInt(item[1],10);
+      elementToUpdate.value+=parseInt(item[3],10);
+      
     }
     // Find and update an element
     const elementToUpdate1 = pieData.find((i) => i.label === item[2]);

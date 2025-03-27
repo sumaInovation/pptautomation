@@ -57,7 +57,7 @@ function MachineDataForm() {
        console.log(response.data.message);
        // Assuming `response.data.message` contains your data
         const newdata=(response.data.message).map(item=>{
-                return [item[0],item[3],item[4]]
+                return [item[0],item[3],item[4],item[5]];//date ,timeduration ,reason ,lenght
 
         })
         setData(newdata);
