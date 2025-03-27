@@ -45,7 +45,8 @@ const Analysispage = () => {
       dates.forEach((i) => {
         const sum = dataset[j].reduce((acc, prev) => {
           if (!acc[i]) acc[i] = 0;
-          if (prev[0] == i) acc[i] += parseInt(prev[1], 10);
+          //if (prev[0] == i) acc[i] += parseInt(prev[1], 10);
+          if (prev[0] == i) acc[i] += parseFloat(prev[1]);
           return acc;
         }, {});
         if (!tabledata[j]) tabledata[j] = [];
@@ -64,8 +65,8 @@ const Analysispage = () => {
   return (
     <div className="container mx-auto p-4 mt-[80px]">
       <ReportGenerator />
-      <h2 className="text-2xl font-semibold mb-4 text-center">Data Tables</h2>
-      <div className="grid lg:grid-cols-4 gap-4">
+      <h2 className="mb-4 text-2xl font-semibold text-center">Data Tables</h2>
+      <div className="grid gap-4 lg:grid-cols-4">
         {Object.keys(Tablevalue).map((category) => {
           // Calculate the total value for the current category
           const totalValue = Tablevalue[category].reduce((sum, entry) => {
@@ -75,17 +76,17 @@ const Analysispage = () => {
 
           return (
             <div key={category} className="mb-6">
-              <h3 className="text-xl font-medium mb-2 text-center">
+              <h3 className="mb-2 text-xl font-medium text-center">
                 {category}
               </h3>
 
               {/* Make the table scrollable on smaller screens */}
               <div className="overflow-x-auto">
-                <table className="min-w-full table-auto border-collapse">
+                <table className="min-w-full border-collapse table-auto">
                   <thead>
                     <tr className="bg-gray-600">
-                      <th className="border p-2">Date</th>
-                      <th className="border p-2">Duration(Min)</th>
+                      <th className="p-2 border">Date</th>
+                      <th className="p-2 border">Duration(Min)</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -94,17 +95,17 @@ const Analysispage = () => {
                       const value = entry[date]; // Extract the value
                       return (
                         <tr key={index}>
-                          <td className="border p-2">{date}</td>
-                          <td className="border p-2">{value}</td>
+                          <td className="p-2 border">{date}</td>
+                          <td className="p-2 border">{value}</td>
                         </tr>
                       );
                     })}
                   </tbody>
                   {/* Total row at the bottom */}
                   <tfoot>
-                    <tr className="bg-gray-700 font-semibold">
-                      <td className="border p-2 text-right">Total</td>
-                      <td className="border p-2">{totalValue}</td>
+                    <tr className="font-semibold bg-gray-700">
+                      <td className="p-2 text-right border">Total</td>
+                      <td className="p-2 border">{totalValue}</td>
                     </tr>
                   </tfoot>
                 </table>
