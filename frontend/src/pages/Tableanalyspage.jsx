@@ -105,7 +105,7 @@ const Analysispage = () => {
                   <tfoot>
                     <tr className="font-semibold bg-gray-700">
                       <td className="p-2 text-right border">Total</td>
-                      <td className="p-2 border">{totalValue}</td>
+                      <td className="p-2 border">{totalValue.toFixed(2)}</td>
                     </tr>
                   </tfoot>
                 </table>

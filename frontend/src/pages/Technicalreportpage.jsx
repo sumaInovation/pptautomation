@@ -198,8 +198,8 @@ const DynamicReport = () => {
             <thead style="background-color: #2c3e50; color: white;">
               <tr>
                 <th style="padding: 12px; border: 1px solid #ddd;">Date</th>
-                <th style="padding: 12px; border: 1px solid #ddd;">Runtime</th>
-                 <th style="padding: 12px; border: 1px solid #ddd;">Downtime</th>
+                <th style="padding: 12px; border: 1px solid #ddd;">Runtime(Min)</th>
+                 <th style="padding: 12px; border: 1px solid #ddd;">Downtime(Min)</th>
               </tr>
             </thead>
             <tbody>
