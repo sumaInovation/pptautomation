@@ -46,7 +46,7 @@ const Analysispage = () => {
         const sum = dataset[j].reduce((acc, prev) => {
           if (!acc[i]) acc[i] = 0;
           //if (prev[0] == i) acc[i] += parseInt(prev[1], 10);
-          if (prev[0] == i) acc[i] += parseFloat(prev[1].toFixed(2));
+          if (prev[0] == i) acc[i] += parseFloat(prev[1]).toFixed(2);
           return acc;
         }, {});
         if (!tabledata[j]) tabledata[j] = [];
