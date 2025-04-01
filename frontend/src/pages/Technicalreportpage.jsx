@@ -1,54 +1,49 @@
-
 import React, { useEffect, useRef, useState } from "react";
 import html2pdf from "html2pdf.js";
 import { useDataContext } from "../context/useTableContext";
+
 const DynamicReport = () => {
   const { data } = useDataContext();
   const svgRefLineChart = useRef(null);
   const svgRefPieChart = useRef(null);
   const lineData = [];
-  const pieData=[];
-  const tableData=[];
+  const pieData = [];
+  const tableData = [];
+
   data.forEach((item) => {
     if (!lineData.some((i) => i.date == item[0]))
-        lineData.push({ date: item[0], value: 0 });
-    if(!pieData.some(j=>j.label==item[2]))
-      pieData.push({label:item[2],value:0});
-    if(!tableData.some(k=>k.date==item[0]))
-      tableData.push({date:item[0],runtime:0,downtime:0})
-    // Find and update an element
+      lineData.push({ date: item[0], value: 0 });
+    if (!pieData.some((j) => j.label == item[2]))
+      pieData.push({ label: item[2], value: 0 });
+    if (!tableData.some((k) => k.date == item[0]))
+      tableData.push({ date: item[0], runtime: 0, downtime: 0 });
+
     const elementToUpdate = lineData.find((i) => i.date === item[0]);
-
     if (elementToUpdate) {
-      //if(item[2]==="RUNNING")elementToUpdate.value+=parseInt(item[1],10);
-      elementToUpdate.value+=parseInt(item[3],10);
-      
+      elementToUpdate.value += parseInt(item[3], 10);
     }
-    // Find and update an element
+
     const elementToUpdate1 = pieData.find((i) => i.label === item[2]);
-
     if (elementToUpdate1) {
-      elementToUpdate1.value+=parseInt(item[1],10);
+      elementToUpdate1.value += parseInt(item[1], 10);
     }
-     // Find and update an element
-     const elementToUpdate2 = tableData.find((k) => k.date === item[0]);
 
-     if (elementToUpdate2) {
-      if(item[2]==="RUNNING"){
-        elementToUpdate2.runtime+=parseFloat(item[1]);
-      }else{
-        elementToUpdate2.downtime+=parseFloat(item[1]);
+    const elementToUpdate2 = tableData.find((k) => k.date === item[0]);
+    if (elementToUpdate2) {
+      if (item[2] === "RUNNING") {
+        elementToUpdate2.runtime += parseFloat(item[1]);
+      } else {
+        elementToUpdate2.downtime += parseFloat(item[1]);
       }
-      
-     }
+    }
   });
- 
- useEffect(() => {
+
+  useEffect(() => {
     // Line Chart SVG Rendering
     const svgElementLine = svgRefLineChart.current;
     const lineChartWidth = 500;
     const lineChartHeight = 300;
-    const padding = 50; // Padding for labels and axes
+    const padding = 50;
     const maxLineValue = Math.max(...lineData.map((d) => d.value));
     const scaleX = (lineChartWidth - 2 * padding) / (lineData.length - 1);
     const scaleY = (lineChartHeight - 2 * padding) / maxLineValue;
@@ -62,10 +57,22 @@ const DynamicReport = () => {
       })
       .join(" ");
 
+    // Generate data point circles and value labels
+    const dataPoints = lineData
+      .map((point, index) => {
+        const x = padding + index * scaleX;
+        const y = lineChartHeight - padding - point.value * scaleY;
+        return `
+          <circle cx="${x}" cy="${y}" r="4" fill="blue" />
+          <text x="${x}" y="${y - 10}" fill="#000" font-size="10" text-anchor="middle">${point.value}</text>
+        `;
+      })
+      .join("");
+
     // Generate horizontal gridlines and labels for the y-axis
     const yAxisLabels = Array.from({ length: 6 }, (_, i) => {
       const value = (maxLineValue / 5) * i;
-      const y = lineChartHeight - padding - value * scaleY; // Correct y-positioning based on scale
+      const y = lineChartHeight - padding - value * scaleY;
       return `
         <line x1="${padding}" x2="${lineChartWidth - padding}" y1="${y}" y2="${y}" stroke="#e0e0e0" />
         <text x="${padding - 5}" y="${y}" fill="#000" font-size="12" text-anchor="end" dominant-baseline="middle">${Math.floor(value)}</text>
@@ -89,32 +96,34 @@ const DynamicReport = () => {
 
     // Render the SVG
     svgElementLine.innerHTML = `
-     <svg width="${lineChartWidth + padding * 2}" height="${lineChartHeight}" xmlns="http://www.w3.org/2000/svg">
-    <!-- Draw gridlines -->
-    ${yAxisLabels}
-    ${xAxisLabels}
+      <svg width="${lineChartWidth + padding * 2}" height="${lineChartHeight}" xmlns="http://www.w3.org/2000/svg">
+        <!-- Draw gridlines -->
+        ${yAxisLabels}
+        ${xAxisLabels}
 
-    <!-- Draw x-axis -->
-    <line x1="${padding}" x2="${lineChartWidth - padding}" y1="${lineChartHeight - padding}" y2="${lineChartHeight - padding}" stroke="black" stroke-width="1" />
-    <text x="${lineChartWidth / 2}" y="${lineChartHeight}" fill="#000" font-size="14" text-anchor="middle">Duration</text>
+        <!-- Draw x-axis -->
+        <line x1="${padding}" x2="${lineChartWidth - padding}" y1="${lineChartHeight - padding}" y2="${lineChartHeight - padding}" stroke="black" stroke-width="1" />
+        <text x="${lineChartWidth / 2}" y="${lineChartHeight}" fill="#000" font-size="14" text-anchor="middle">Duration</text>
 
-    <!-- Draw y-axis -->
-    <line x1="${padding}" x2="${padding}" y1="${padding}" y2="${lineChartHeight - padding}" stroke="black" stroke-width="1" />
-    <text x="${padding - 20}" y="${lineChartHeight / 2}" fill="#000" font-size="14" text-anchor="middle" transform="rotate(-90, ${padding - 40}, ${lineChartHeight / 2})">Length(M)</text>
+        <!-- Draw y-axis -->
+        <line x1="${padding}" x2="${padding}" y1="${padding}" y2="${lineChartHeight - padding}" stroke="black" stroke-width="1" />
+        <text x="${padding - 20}" y="${lineChartHeight / 2}" fill="#000" font-size="14" text-anchor="middle" transform="rotate(-90, ${padding - 40}, ${lineChartHeight / 2})">Length(M)</text>
 
-    <!-- Draw line chart -->
-    <path d="${linePath}" stroke="blue" fill="none" stroke-width="2"/>
-</svg>
-
+        <!-- Draw line chart -->
+        <path d="${linePath}" stroke="blue" fill="none" stroke-width="2"/>
+        
+        <!-- Draw data points and value labels -->
+        ${dataPoints}
+      </svg>
     `;
 
-    // Pie Chart SVG Rendering
+    // Pie Chart SVG Rendering (unchanged)
     const svgElementPie = svgRefPieChart.current;
     const pieChartWidth = 300;
     const pieChartHeight = 300;
     const radius = pieChartWidth / 2;
     const pieTotal = pieData.reduce((sum, item) => sum + item.value, 0);
-    let startAngle = 0; // Initialize startAngle here
+    let startAngle = 0;
     const pieSlices = pieData.map((slice, index) => {
       const sliceAngle = (slice.value / pieTotal) * 360;
       const endAngle = startAngle + sliceAngle;
@@ -126,35 +135,28 @@ const DynamicReport = () => {
 
       const pathData = `M${radius},${radius} L${x1},${y1} A${radius},${radius} 0 ${largeArcFlag},1 ${x2},${y2} Z`;
 
-      // Calculate label position
       const midAngle = startAngle + sliceAngle / 2;
       const labelX =
         radius + (radius / 1.5) * Math.cos((Math.PI * midAngle) / 180);
       const labelY =
         radius + (radius / 1.5) * Math.sin((Math.PI * midAngle) / 180);
-
-      // Format percentage
       const percentage = ((slice.value / pieTotal) * 100).toFixed(1) + "%";
 
       startAngle = endAngle;
 
-    
-        return `
-          <path d="${pathData}" fill="hsl(${index * 60}, 70%, 50%)" />
-          <text x="${labelX}" y="${labelY}" fill="#000" font-size="09" text-anchor="middle" dominant-baseline="middle">
-            ${slice.label} (${percentage})
-          </text>
-        `;
-      
-      
+      return `
+        <path d="${pathData}" fill="hsl(${index * 60}, 70%, 50%)" />
+        <text x="${labelX}" y="${labelY}" fill="#000" font-size="09" text-anchor="middle" dominant-baseline="middle">
+          ${slice.label} (${percentage})
+        </text>
+      `;
     });
 
-    // Render the SVG
     svgElementPie.innerHTML = `
-        <svg width="${pieChartWidth}" height="${pieChartHeight}" viewBox="0 0 ${pieChartWidth} ${pieChartHeight}">
-          ${pieSlices.join("")}
-        </svg>
-      `;
+      <svg width="${pieChartWidth}" height="${pieChartHeight}" viewBox="0 0 ${pieChartWidth} ${pieChartHeight}">
+        ${pieSlices.join("")}
+      </svg>
+    `;
   }, [lineData, pieData]);
 
   const generatePDF = () => {
@@ -199,7 +201,7 @@ const DynamicReport = () => {
               <tr>
                 <th style="padding: 12px; border: 1px solid #ddd;">Date</th>
                 <th style="padding: 12px; border: 1px solid #ddd;">Runtime(Min)</th>
-                 <th style="padding: 12px; border: 1px solid #ddd;">Downtime(Min)</th>
+                <th style="padding: 12px; border: 1px solid #ddd;">Downtime(Min)</th>
               </tr>
             </thead>
             <tbody>
@@ -215,7 +217,7 @@ const DynamicReport = () => {
                       <td style="padding: 12px; border: 1px solid #ddd;">${
                         row.runtime.toFixed(2)
                       }</td>
-                        <td style="padding: 12px; border: 1px solid #ddd;">${
+                      <td style="padding: 12px; border: 1px solid #ddd;">${
                         row.downtime.toFixed(2)
                       }</td>
                     </tr>
@@ -249,53 +251,52 @@ const DynamicReport = () => {
 
   return (
     <>
-    <div className="p-4 mt-[80px] text-black">
-      <div className="flex flex-col md:flex-row justify-between mt-[-2000px]">
-        <div>
-          <h2 className="mb-2 text-lg font-semibold">Line Chart</h2>
-          <div ref={svgRefLineChart}></div>
+      <div className="p-4 mt-[80px] text-black">
+        <div className="flex flex-col md:flex-row justify-between mt-[-2000px]">
+          <div>
+            <h2 className="mb-2 text-lg font-semibold">Line Chart</h2>
+            <div ref={svgRefLineChart}></div>
+          </div>
+          <div>
+            <h2 className="mb-2 text-lg font-semibold">Pie Chart</h2>
+            <div ref={svgRefPieChart}></div>
+          </div>
         </div>
-        <div>
-        
-          <h2 className="mb-2 text-lg font-semibold">Pie Chart</h2>
-          <div ref={svgRefPieChart}></div>
-        </div>
-      </div>
 
-      <div className="mt-4">
-        <h2 className="mb-2 text-lg font-semibold">Data Table</h2>
-        <table className="w-full border border-collapse border-gray-400 table-auto">
-          <thead>
-            <tr>
-              <th className="px-4 py-2 border border-gray-400">Date</th>
-              <th className="px-4 py-2 border border-gray-400">Value</th>
-            </tr>
-          </thead>
-          <tbody>
-            {lineData.map((row, index) => (
-              <tr key={index}>
-                <td className="px-4 py-2 border border-gray-400">{row.date}</td>
-                <td className="px-4 py-2 border border-gray-400">
-                  {row.value}
-                </td>
+        <div className="mt-4">
+          <h2 className="mb-2 text-lg font-semibold">Data Table</h2>
+          <table className="w-full border border-collapse border-gray-400 table-auto">
+            <thead>
+              <tr>
+                <th className="px-4 py-2 border border-gray-400">Date</th>
+                <th className="px-4 py-2 border border-gray-400">Value</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {lineData.map((row, index) => (
+                <tr key={index}>
+                  <td className="px-4 py-2 border border-gray-400">
+                    {row.date}
+                  </td>
+                  <td className="px-4 py-2 border border-gray-400">
+                    {row.value}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
-
-     
-    </div>
-    <div className="relative w-full p-4">
-      {/* Button in the right corner */}
-      <button className="absolute top-0 right-0 px-4 py-2 m-2 text-white bg-blue-500 rounded"
-      onClick={generatePDF}>
-        Print Report
-      </button>
-    </div>
+      <div className="relative w-full p-4">
+        <button
+          className="absolute top-0 right-0 px-4 py-2 m-2 text-white bg-blue-500 rounded"
+          onClick={generatePDF}
+        >
+          Print Report
+        </button>
+      </div>
     </>
   );
 };
 
 export default DynamicReport;
-
