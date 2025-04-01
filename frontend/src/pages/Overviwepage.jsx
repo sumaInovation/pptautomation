@@ -18,8 +18,6 @@ const Overviwepage = () => {
 	const API_URL = import.meta.env.MODE === "development" ? "http://localhost:5000/thismonth-production" : '/thismonth-production';
    
 	useEffect(() => {
-		
-	
 		try{
 			const{Length,start,end,reason,state}=messages;
 			if(Length!=undefined){
@@ -54,10 +52,10 @@ const Overviwepage = () => {
 		
 		<div className='flex-1 overflow-y-auto  p-4 z-0 mt-[75px] '>
 		
-			<main className=' mx-auto py-6 px-4 lg:px-8'>
+			<main className='px-4 py-6 mx-auto  lg:px-8'>
 				{/* STATS */}
 				<motion.div
-					className='grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8'
+					className='grid grid-cols-1 gap-5 mb-8 sm:grid-cols-2 lg:grid-cols-4'
 					initial={{ opacity: 0, y: 20 }}
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ duration: 1 }}
@@ -71,7 +69,7 @@ const Overviwepage = () => {
 				{/* CHARTS */}
 
 
-				<div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
+				<div className='grid grid-cols-1 gap-8 lg:grid-cols-2'>
 					<RealTimeLineChart />
 					<Disributepiechar />
 					
